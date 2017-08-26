@@ -48,7 +48,7 @@ jobs:
           name: Run elasticsearch
           command: |
             set -x
-            docker run -d --name elasticsearch -p 9200:9200 -e discovery.type=single-node blacktop/elasticsearch; sleep 10;
+            docker run -d --name elasticsearch -p 9200:9200 -e discovery.type=single-node blacktop/elasticsearch:geoip; sleep 10;
             docker logs elasticsearch
       - run:
           name: Run test

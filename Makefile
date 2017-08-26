@@ -23,7 +23,7 @@ tags:
 
 test: stop ## Test docker image
 	@echo "===> Starting elasticsearch"
-	@docker run --init -d --name elasticsearch -p 9200:9200 blacktop/elasticsearch:$(BUILD); sleep 10
+	@docker run --init -d --name elasticsearch -p 9200:9200 blacktop/elasticsearch:geoip; sleep 10
 	@echo "===> Adding es-data to DB"
 	@docker run --rm --link elasticsearch $(ORG)/$(NAME):$(BUILD)
 

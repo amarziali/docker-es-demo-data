@@ -1,20 +1,22 @@
 docker-es-demo-data
 ===================
 
-[![CircleCI](https://circleci.com/gh/blacktop/docker-es-demo-data.png?style=shield)](https://circleci.com/gh/blacktop/docker-es-demo-data) [![License](https://img.shields.io/badge/licence-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) [![Docker Stars](https://img.shields.io/docker/stars/blacktop/es-data.svg)](https://hub.docker.com/r/blacktop/es-data/) [![Docker Pulls](https://img.shields.io/docker/pulls/blacktop/es-data.svg)](https://hub.docker.com/r/blacktop/es-data/) [![Docker Image](https://img.shields.io/badge/docker%20image-24.99%20MB-blue.svg)](https://hub.docker.com/r/blacktop/es-data/)
+[![CircleCI](https://circleci.com/gh/blacktop/docker-es-demo-data.png?style=shield)](https://circleci.com/gh/blacktop/docker-es-demo-data) [![License](https://img.shields.io/badge/licence-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) [![Docker Stars](https://img.shields.io/docker/stars/blacktop/es-data.svg)](https://hub.docker.com/r/blacktop/es-data/) [![Docker Pulls](https://img.shields.io/docker/pulls/blacktop/es-data.svg)](https://hub.docker.com/r/blacktop/es-data/) [![Docker Image](https://img.shields.io/badge/docker%20image-21.1MB-blue.svg)](https://hub.docker.com/r/blacktop/es-data/)
 
-Nginx Demo Data for Elasticsearch
+> Nginx Demo Data for Elasticsearch
+
+---
 
 ### Dependencies
 
--	[gliderlabs/alpine:3.4](https://index.docker.io/_/gliderlabs/alpine/)
+-	[alpine:3.6](https://hub.docker.com/_/alpine/)
 
 ### Image Tags
 
 ```bash
 REPOSITORY          TAG                 SIZE
-blacktop/es-data   latest              24.99 MB
-blacktop/es-data   5.0                 24.99 MB
+blacktop/es-data   latest              21.1MB
+blacktop/es-data   5.0                 21.1MB
 ```
 
 ### Getting Started
@@ -37,7 +39,7 @@ $ docker run --rm --link elastic:elasticsearch -e ES_USERNAME=elastic -e ES_PASS
 
 ![es-data](https://raw.githubusercontent.com/blacktop/docker-es-demo-data/master/add-data-dashboard.png)
 
-To use with a non-docker Elasticsearch node  
+To use with a non-docker Elasticsearch node
 
 ```bash
 $ docker run --rm -e ES_URL=http://localhost:9200 blacktop/es-data

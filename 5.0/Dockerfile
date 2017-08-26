@@ -1,21 +1,21 @@
-FROM gliderlabs/alpine:3.4
+FROM alpine:3.6
 
-MAINTAINER blacktop, https://github.com/blacktop
+LABEL maintainer "https://github.com/blacktop"
 
 ENV STACK 5.0.0
 ENV BULK_SIZE 5242880
 
 COPY main.go /go/src/main.go
-RUN apk-install -t .build-deps \
-                    ca-certificates \
-                    build-base \
-                    mercurial \
-                    musl-dev \
-                    openssl \
-                    wget \
-                    bash \
-                    git \
-                    go \
+RUN apk add --no-cache -t .build-deps \
+                          ca-certificates \
+                          build-base \
+                          mercurial \
+                          musl-dev \
+                          openssl \
+                          wget \
+                          bash \
+                          git \
+                          go \
   && set -x \
   && echo "Build [import-dashboard] Go binary..." \
   && export GOPATH=/go \

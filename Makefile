@@ -21,7 +21,11 @@ endif
 tags:
 	docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" $(ORG)/$(NAME)
 
-test: ## Test docker image
+test: stop ## Test docker image
+	@echo "===> Starting elasticsearch"
+	@docker run --init -d --name elasticsearch -p 9200:9200 blacktop/elasticsearch:$(BUILD); sleep 10
+	@echo "===> Adding es-data to DB"
+	@docker run --rm --link elasticsearch $(ORG)/$(NAME):$(BUILD)
 
 tar: ## Export tar of docker image
 	docker save $(ORG)/$(NAME):$(BUILD) -o $(NAME).tar
@@ -31,12 +35,13 @@ push: build ## Push docker image to docker registry
 	@docker push $(ORG)/$(NAME):$(BUILD)
 
 run: stop ## Run docker container
-	@docker run --init -d --name $(NAME) -p 9200:9200 $(ORG)/$(NAME):$(BUILD)
+	@docker run --init -d --name $(NAME) $(ORG)/$(NAME):$(BUILD)
 
 ssh: ## SSH into docker image
 	@docker run --init -it --rm --entrypoint=sh $(ORG)/$(NAME):$(BUILD)
 
 stop: ## Kill running malice-engine docker containers
+	@docker rm -f elasticsearch || true
 	@docker rm -f $(NAME) || true
 
 circle: ci-size ## Get docker image size from CircleCI
@@ -54,7 +59,6 @@ ci-size: ci-build
 clean: ## Clean docker image and stop all running containers
 	docker-clean stop
 	docker rmi $(ORG)/$(NAME):$(BUILD) || true
-	rm -rf malice/build
 
 # Absolutely awesome: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help:

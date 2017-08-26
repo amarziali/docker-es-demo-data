@@ -1,7 +1,7 @@
 docker-es-demo-data
 ===================
 
-[![CircleCI](https://circleci.com/gh/blacktop/docker-es-demo-data.png?style=shield)](https://circleci.com/gh/blacktop/docker-es-demo-data) [![License](https://img.shields.io/badge/licence-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) [![Docker Stars](https://img.shields.io/docker/stars/blacktop/es-data.svg)](https://hub.docker.com/r/blacktop/es-data/) [![Docker Pulls](https://img.shields.io/docker/pulls/blacktop/es-data.svg)](https://hub.docker.com/r/blacktop/es-data/) [![Docker Image](https://img.shields.io/badge/docker%20image-21.1MB-blue.svg)](https://hub.docker.com/r/blacktop/es-data/)
+[![CircleCI](https://circleci.com/gh/blacktop/docker-es-demo-data.png?style=shield)](https://circleci.com/gh/blacktop/docker-es-demo-data) [![License](https://img.shields.io/badge/licence-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) [![Docker Stars](https://img.shields.io/docker/stars/blacktop/es-data.svg)](https://hub.docker.com/r/blacktop/es-data/) [![Docker Pulls](https://img.shields.io/docker/pulls/blacktop/es-data.svg)](https://hub.docker.com/r/blacktop/es-data/) [![Docker Image](https://img.shields.io/badge/docker%20image-24.2MB-blue.svg)](https://hub.docker.com/r/blacktop/es-data/)
 
 > Nginx Demo Data for Elasticsearch
 
@@ -15,7 +15,8 @@ docker-es-demo-data
 
 ```bash
 REPOSITORY          TAG                 SIZE
-blacktop/es-data   latest              21.1MB
+blacktop/es-data   latest              24.2MB
+blacktop/es-data   5.5                 24.2MB
 blacktop/es-data   5.0                 21.1MB
 ```
 

@@ -33,9 +33,9 @@ $ docker run --rm --link elastic:elasticsearch blacktop/es-data
 > **NOTE:** To use with an **x-pack** image use the env vars to set the creds like so
 
 ```bash
-$ docker run -d --name elastic -p 9200:9200 blacktop/elasticsearch:x-pack
-$ docker run -d --name kibana --link elastic:elasticsearch -p 5601:5601 blacktop/kibana:x-pack
-$ docker run --rm --link elastic:elasticsearch -e ES_USERNAME=elastic -e ES_PASSWORD=changeme blacktop/es-data
+$ docker run -d --name elasticsearch -p 9200:9200 blacktop/elasticsearch:x-pack
+$ docker run -d --name kibana --link elasticsearch -p 5601:5601 blacktop/kibana:x-pack
+$ docker run --rm --link elasticsearch -e ES_USERNAME=elastic -e ES_PASSWORD=changeme blacktop/es-data
 ```
 
 ![es-data](https://raw.githubusercontent.com/blacktop/docker-es-demo-data/master/add-data-dashboard.png)

@@ -28,6 +28,7 @@ test: stop ## Test docker image
 	@docker run --init -d --name kibana --link elasticsearch -p 5601:5601 blacktop/kibana:$(BUILD); sleep 5
 	@echo "===> Adding es-data to DB"
 	@docker run --rm --link elasticsearch --link kibana $(ORG)/$(NAME):$(BUILD)
+	@open -a Safari http://localhost:5601
 
 tar: ## Export tar of docker image
 	docker save $(ORG)/$(NAME):$(BUILD) -o $(NAME).tar

@@ -27,7 +27,7 @@ test: stop ## Test docker image
 	@echo "===> Starting kibana"
 	@docker run --init -d --name kibana --link elasticsearch -p 5601:5601 blacktop/kibana:$(BUILD); sleep 5
 	@echo "===> Adding es-data to DB"
-	@docker run --rm --link elasticsearch --link kibana $(ORG)/$(NAME):$(BUILD)
+	@docker run -d --link elasticsearch --link kibana $(ORG)/$(NAME):$(BUILD)
 	@open -a Safari http://localhost:5601
 
 tar: ## Export tar of docker image
@@ -69,3 +69,5 @@ help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .DEFAULT_GOAL := help
+
+# curl -XPUT "http://localhost:9200/.kibana/index-pattern/filebeat-*" -H 'Content-Type: application/json' -d '{"title" : "filebeat-*",  "timeFieldName": "@timestamp"}'

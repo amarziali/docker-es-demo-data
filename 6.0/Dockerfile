@@ -45,7 +45,7 @@ COPY --from=downloader /go/src/github.com/elastic/beats/filebeat/filebeat /bin/f
 COPY --from=downloader /go/src/github.com/elastic/beats/filebeat/filebeat.yml /usr/share/filebeat/filebeat.yml
 COPY kibana/ /usr/share/filebeat/kibana/
 COPY module/nginx /usr/share/filebeat/module/nginx
-COPY modules.d/nginx.yml.disabled /usr/share/filebeat/modules.d/nginx.yml.disabled
+COPY modules.d/nginx.yml /usr/share/filebeat/modules.d/nginx.yml
 COPY fields.yml /usr/share/filebeat/fields.yml
 
 COPY --from=downloader /tmp/nginx_logs /data/nginx_logs

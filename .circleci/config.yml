@@ -48,10 +48,16 @@ jobs:
           name: Run elasticsearch
           command: |
             set -x
-            docker run -d --name elasticsearch -p 9200:9200 -e discovery.type=single-node blacktop/elasticsearch:geoip; sleep 10;
+            docker run -d --name elasticsearch -p 9200:9200 -e discovery.type=single-node blacktop/elasticsearch:geoip; sleep 15;
             docker logs elasticsearch
+      - run:
+          name: Run kibana
+          command: |
+            set -x
+            docker run -d --name kibana -p 5601:5601 blacktop/kibana:$(cat LATEST); sleep 5;
+            docker logs kibana
       - run:
           name: Run test
           command: |
             set -x
-            docker run --rm --link elasticsearch app
+            docker run --rm --link elasticsearch --link kibana app

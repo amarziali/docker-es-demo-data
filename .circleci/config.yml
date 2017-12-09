@@ -54,7 +54,7 @@ jobs:
           name: Run kibana
           command: |
             set -x
-            docker run -d --name kibana -p 5601:5601 blacktop/kibana:$(cat LATEST); sleep 5;
+            docker run -d --name kibana -p 5601:5601 blacktop/kibana:$(cat LATEST); sleep 10;
             docker logs kibana
       - run:
           name: Run test

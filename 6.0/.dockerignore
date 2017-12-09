@@ -11,3 +11,11 @@ build
 release
 Makefile
 VERSION
+
+apache_logs
+nginx_logs
+module/auditd*
+module/icinga*
+module/mysql*
+module/redis*
+module/system*

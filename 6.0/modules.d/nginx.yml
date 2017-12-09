@@ -3,8 +3,8 @@
   access:
     enabled: true
     var.paths: ["/data/nginx_logs"]
-    prospector:
-      close_eof: true
+    # prospector:
+    #   close_eof: true
 
   # Error logs
   error:

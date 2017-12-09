@@ -9,7 +9,7 @@ LATEST ?=$(shell cat LATEST)
 all: build size test
 
 build: ## Build docker image
-	cd $(BUILD); docker build -t $(ORG)/$(NAME):$(BUILD) .
+	cd $(BUILD); docker build --pull -t $(ORG)/$(NAME):$(BUILD) .
 
 size: build ## Get built image size
 ifeq "$(BUILD)" "$(LATEST)"
@@ -23,12 +23,16 @@ tags:
 
 test: stop ## Test docker image
 	@echo "===> Starting elasticsearch"
-	@docker run --init -d --name elasticsearch -p 9200:9200 blacktop/elasticsearch:geoip; sleep 15
-	@echo "===> Starting kibana"
-	@docker run --init -d --name kibana --link elasticsearch -p 5601:5601 blacktop/kibana:$(BUILD); sleep 5
+	@docker run --init -d --name elasticsearch -p 80:80 -p 9200:9200 blacktop/elastic-stack:geoip; sleep 15
+	# @docker run --init -d --name elasticsearch -p 9200:9200 blacktop/elasticsearch:geoip; sleep 15
+	# @echo "===> Starting kibana"
+	# @docker run --init -d --name kibana --link elasticsearch -p 5601:5601 blacktop/kibana:6.0.0 sleep 5
 	@echo "===> Adding es-data to DB"
-	@docker run -d --link elasticsearch --link kibana $(ORG)/$(NAME):$(BUILD)
-	@open -a Safari http://localhost:5601
+	@docker run -d --name $(NAME) --link elasticsearch $(ORG)/$(NAME):$(BUILD); sleep 5
+	@open -a Safari http://localhost
+	@http localhost:9200/_cat/indices
+	@http localhost:9200/filebeat-*/_count
+	@docker logs -f es-data
 
 tar: ## Export tar of docker image
 	docker save $(ORG)/$(NAME):$(BUILD) -o $(NAME).tar
@@ -71,3 +75,4 @@ help:
 .DEFAULT_GOAL := help
 
 # curl -XPUT "http://localhost:9200/.kibana/index-pattern/filebeat-*" -H 'Content-Type: application/json' -d '{"title" : "filebeat-*",  "timeFieldName": "@timestamp"}'
+# curl -XPUT http://localhost:9200/.kibana/config/4.5.0 -H 'Content-Type: application/json' -d '{"defaultIndex" : "filebeat-*""}'

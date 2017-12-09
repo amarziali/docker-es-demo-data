@@ -1,13 +1,15 @@
-FROM alpine:3.7
+##########################################################
+# DOWNLOADER                                             #
+##########################################################
+FROM alpine:3.7 as downloader
 
 LABEL maintainer "https://github.com/blacktop"
 
-ENV STACK 6.0.1
-ENV BULK_SIZE 5242880
+ENV VERSION 6.0.1
+ENV GOPATH /go
 
 COPY main.go /go/src/main.go
-RUN apk add --no-cache -t .build-deps \
-                          ca-certificates \
+RUN apk add --no-cache ca-certificates \
                           build-base \
                           mercurial \
                           musl-dev \
@@ -15,25 +17,36 @@ RUN apk add --no-cache -t .build-deps \
                           wget \
                           bash \
                           git \
-                          go \
-  && set -x \
-  && echo "Build [import-dashboard] Go binary..." \
-  && export GOPATH=/go \
-  && go version \
-  && git clone -b v$STACK https://github.com/elastic/beats.git $GOPATH/src/github.com/elastic/beats \
-  && cd $GOPATH/src/github.com/elastic/beats/libbeat/dashboards \
-  && go build -ldflags "-s -w -X main.beat=" -o import_dashboards \
-  && mv import_dashboards /bin/import_dashboards \
-  && echo "Building [ingest] Go binary..." \
-  && cd /go/src/ \
-  && export GOPATH=/go \
-  && go version \
-  && go get -d \
-  && go build -ldflags="-s -w" -o /bin/ingest \
-  && rm -rf /go /usr/local/go /usr/lib/go /tmp/* \
-  && apk del --purge .build-deps
+                          go
 
-COPY nginx_data/data.zip /nginx_data/data.zip
+RUN echo "===> Install filebeat..."
+RUN mkdir -p ${GOPATH}/src/github.com/elastic
+RUN cd ${GOPATH}/src/github.com/elastic && git clone -b v$VERSION --depth 1 https://github.com/elastic/beats.git
+RUN cd ${GOPATH}/src/github.com/elastic/beats/filebeat && make
+
+RUN echo "===> Download nginx_logs..." \
+  && wget --progress=bar:force -O /tmp/nginx_logs \
+    https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs
+
+RUN ls -lah /tmp
+RUN ls -lah ${GOPATH}/src/github.com/elastic/beats/filebeat
+RUN ls -lah ${GOPATH}
+
+##########################################################
+# ES-DATA                                                #
+##########################################################
+FROM alpine:latest
+
+ENV BULK_SIZE 5242880
+
+RUN apk --no-cache add ca-certificates
+
+RUN mkdir -p /usr/share/filebeat/kibana/default
+COPY --from=downloader /go/src/github.com/elastic/beats/filebeat/filebeat /bin/filebeat
+COPY --from=downloader /go/src/github.com/elastic/beats/filebeat/filebeat.yml /usr/share/filebeat/filebeat.yml
+COPY --from=downloader /tmp/nginx_logs /data/nginx_logs
 COPY load.sh /load.sh
+
+WORKDIR /usr/share/filebeat
 
 ENTRYPOINT ["/load.sh"]

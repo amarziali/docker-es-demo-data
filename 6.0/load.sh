@@ -3,13 +3,7 @@
 set -e
 
 # Ingest data into Elasticsearch
-ingest
-
-# Add Kibana Dashboard
-: ${ES_URL:=http://elasticsearch:9200}
-
-if [ -z ${ES_USERNAME} ]; then
-  import_dashboards -es ${ES_URL} -dir /nginx_data/nginx-dashboard;
-else
-  import_dashboards -es ${ES_URL} -user $ES_USERNAME -pass $ES_PASSWORD -dir /nginx_data/nginx-dashboard;
-fi
+filebeat -e --modules=nginx --setup  \
+         -M "nginx.access.var.paths=/data/nginx_logs" \
+         -E output.elasticsearch.hosts=elasticsearch:9200 \
+         -E setup.kibana.host=kibana:5601

@@ -23,9 +23,11 @@ tags:
 
 test: stop ## Test docker image
 	@echo "===> Starting elasticsearch"
-	@docker run --init -d --name elasticsearch -p 9200:9200 blacktop/elasticsearch:geoip; sleep 10
+	@docker run --init -d --name elasticsearch -p 9200:9200 blacktop/elasticsearch:geoip; sleep 15
+	@echo "===> Starting kibana"
+	@docker run --init -d --name kibana --link elasticsearch -p 5601:5601 blacktop/kibana:$(BUILD); sleep 5
 	@echo "===> Adding es-data to DB"
-	@docker run --rm --link elasticsearch $(ORG)/$(NAME):$(BUILD)
+	@docker run --rm --link elasticsearch --link kibana $(ORG)/$(NAME):$(BUILD)
 
 tar: ## Export tar of docker image
 	docker save $(ORG)/$(NAME):$(BUILD) -o $(NAME).tar
@@ -42,6 +44,7 @@ ssh: ## SSH into docker image
 
 stop: ## Kill running malice-engine docker containers
 	@docker rm -f elasticsearch || true
+	@docker rm -f kibana || true
 	@docker rm -f $(NAME) || true
 
 circle: ci-size ## Get docker image size from CircleCI
